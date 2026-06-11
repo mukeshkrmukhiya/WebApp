@@ -1,6 +1,26 @@
 @WebApp_HostAddress = http://localhost:5260
 
-GET {{WebApp_HostAddress}}/weatherforecast/
+# GET {{WebApp_HostAddress}}/weatherforecast/
+# Accept: application/json
+
+###
+
+
+GET {{WebApp_HostAddress}}/api/employee/
 Accept: application/json
 
 ###
+GET {{WebApp_HostAddress}}/api/employee/0ab73710-3e55-4452-911e-56ba18d2695d
+Accept: application/json
+
+###
+POST {{WebApp_HostAddress}}/api/employee/
+Accept: application/json
+###
+Put {{WebApp_HostAddress}}/api/employee/
+Accept: application/json
+
+
+###
+Delete {{WebApp_HostAddress}}/api/employee/
+Accept: application/json
