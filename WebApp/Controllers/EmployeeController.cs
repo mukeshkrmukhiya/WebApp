@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApp.Models.Dtos;
 using WebApp.Models.Entities;
 using WebApp.Services;
@@ -16,16 +13,16 @@ namespace WebApp.Controllers
 
         public EmployeeController(IEmployeeService employeeService)
         {
-            this._employeeService  = employeeService;
+            this._employeeService = employeeService;
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Employee>>>  GetAllEmployees()
+        public async Task<ActionResult<List<Employee>>> GetAllEmployees()
         {
-            var employees =  await _employeeService.GetAllEmployeesAsyc();
+            var employees = await _employeeService.GetAllEmployeesAsyc();
 
-            if(employees == null || employees.Count == 0)
+            if (employees == null || employees.Count == 0)
                 return NotFound();
 
             return Ok(employees);
@@ -35,7 +32,7 @@ namespace WebApp.Controllers
         public async Task<ActionResult> GetEmployeeById(Guid id)
         {
             var employee = await _employeeService.GetEmployeeByIdAsync(id);
-            if(employee == null)
+            if (employee == null)
                 return NotFound();
 
             return Ok(employee);
@@ -44,7 +41,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<ActionResult> AddEmployee(EmployeeDto employeeDto)
         {
-            
+
 
             var employee = await _employeeService.AddEmployeeAsync(employeeDto);
 
@@ -58,11 +55,20 @@ namespace WebApp.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult> UpdateEmployee(Guid id, EmployeeDto employeeDto)
         {
-            var  employee = await _employeeService.UpdateEmployeeAsync(id, employeeDto);
+            var employee = await _employeeService.UpdateEmployeeAsync(id, employeeDto);
 
             if (employeeDto == null)
                 return BadRequest();
 
+            return Ok(employee);
+        }
+
+        [HttpPatch("{id:guid}")]
+        public async Task<ActionResult> IncreaseSalaryAsync(Guid id, IncreaseSalaryDto increaseSalaryDto)
+        {
+            var employee = await _employeeService.IncreaseSalaryAsync(id, increaseSalaryDto);
+            if (employee == null)
+                return NotFound();
             return Ok(employee);
         }
 
@@ -74,9 +80,9 @@ namespace WebApp.Controllers
 
             bool isDeleted = await _employeeService.DeleteEmployeeAsync(id);
 
-            if(isDeleted == false)
+            if (isDeleted == false)
                 return NotFound();
-        
+
             return NoContent();
         }
     }

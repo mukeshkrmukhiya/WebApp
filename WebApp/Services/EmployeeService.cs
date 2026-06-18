@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Models.Dtos;
 using WebApp.Models.Entities;
@@ -16,12 +17,16 @@ namespace WebApp.Services
 
        public async Task<List<Employee>> GetAllEmployeesAsyc()
         {
-         return  await _context.Employees.ToListAsync();
+         return  await _context.Employees
+                .Include(e => e.Department)
+                .ToListAsync();
             
         }
        public async Task<Employee?> GetEmployeeByIdAsync(Guid id)
         {
-            return await _context.Employees.FindAsync(id);
+            return await _context.Employees
+                .Include(e => e.Department)
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
        public async Task<Employee> AddEmployeeAsync(EmployeeDto employeeDto)
         {
@@ -30,7 +35,8 @@ namespace WebApp.Services
                 Name = employeeDto.Name,
                 Email = employeeDto.Email,
                 PhoneNumber = employeeDto.PhoneNumber,
-                Salary = employeeDto.Salary
+                Salary = employeeDto.Salary,
+                DepartmentId = employeeDto.DepartmentId
             };
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
@@ -50,10 +56,24 @@ namespace WebApp.Services
             employee.Email = employeeDto.Email;
             employee.PhoneNumber = employeeDto.PhoneNumber;
             employee.Salary = employeeDto.Salary;
+            employee.DepartmentId = employeeDto.DepartmentId;
             await _context.SaveChangesAsync();
             return employee;
         }
-       public async Task<bool> DeleteEmployeeAsync(Guid id)
+
+        public async Task<Employee?> IncreaseSalaryAsync( Guid id, IncreaseSalaryDto increaseSalaryDto)
+        {
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null)
+            {
+                return null;
+            }
+            employee.Salary += employee.Salary * (increaseSalaryDto.Percentage / 100);
+            await _context.SaveChangesAsync();
+            return employee;
+        }
+
+        public async Task<bool> DeleteEmployeeAsync(Guid id)
         {
             var employee = await _context.Employees.FindAsync(id);
 
