@@ -6,6 +6,7 @@ namespace WebApp.Services
     {
 
         Task<IEnumerable<Department>> GetAllAsync();
+        Task<object> EmployeesInSameDepartment(int departmentId);
         Task<Department?> GetByIdAsync(int id);
         Task<Department> CreateAsync(Department dto);
         Task<Department> UpdateAsync(int id, Department dto);

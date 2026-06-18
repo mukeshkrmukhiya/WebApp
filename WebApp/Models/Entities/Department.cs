@@ -6,9 +6,10 @@ namespace WebApp.Models.Entities
     {
        public int Id { get; set; }
         public string Name { get; set; }
-        [JsonIgnore]
-        public ICollection<Employee> Employees { get; set; }
-        = new List<Employee>();
+
+        //[JsonIgnore]
+        //public ICollection<Employee> Employees { get; set; }
+        //= new List<Employee>();
         
 
     }

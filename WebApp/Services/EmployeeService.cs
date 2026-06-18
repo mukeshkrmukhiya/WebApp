@@ -9,23 +9,52 @@ namespace WebApp.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly AppDbContext _context;
+        private readonly IDepartmentService _departmentService;
 
-        public EmployeeService(AppDbContext context): base()
+        public EmployeeService(AppDbContext context, IDepartmentService departmentService): base()
         {
             this._context = context;
+            this._departmentService = departmentService;
         }
+
+
+        public async Task<object> EmployeeFullDetailsAsync()
+        {
+            var employees = await _context.Employees.ToListAsync();
+            var departments = await _departmentService.GetAllAsync();
+
+            var result = employees.Join(
+                departments,
+                employee => employee.DepartmentId,
+                department => department.Id,
+                (employee, department) => new
+                {
+                    EmpId = employee.Id,
+                    EmpName = employee.Name,
+                    EmpEmail = employee.Email,
+                    EmpPhone = employee.PhoneNumber,
+                    EmpSalary = employee.Salary,
+                    EmpDepartment = department.Name
+                }).ToList();
+
+            return result;
+        }
+
+
 
        public async Task<List<Employee>> GetAllEmployeesAsyc()
         {
          return  await _context.Employees
-                .Include(e => e.Department)
+                //.Include(e => e.Department)
                 .ToListAsync();
             
         }
-       public async Task<Employee?> GetEmployeeByIdAsync(Guid id)
+
+
+        public async Task<Employee?> GetEmployeeByIdAsync(Guid id)
         {
             return await _context.Employees
-                .Include(e => e.Department)
+                //.Include(e => e.Department)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
        public async Task<Employee> AddEmployeeAsync(EmployeeDto employeeDto)

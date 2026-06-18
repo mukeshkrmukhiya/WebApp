@@ -8,11 +8,39 @@ namespace WebApp.Services
     public class DepartmentService : IDepartmentService
     {
         private readonly AppDbContext _dbContext;
+        private readonly IEmployeeService _employeeService;
 
-        public DepartmentService(AppDbContext dbContext) : base()
+        public DepartmentService(AppDbContext dbContext, IEmployeeService employeeService) : base()
         {
             this._dbContext = dbContext;
+            this._employeeService = employeeService;
         }
+
+        public async Task<object> EmployeesInSameDepartment(int departmentId)
+        {
+            var department = await _dbContext.Departments.FindAsync(departmentId);
+            var employees = await _employeeService.GetAllEmployeesAsyc();
+            if (department == null)
+            {
+                return null;
+            }
+
+            var result = employees
+                .Where(e => e.DepartmentId == departmentId)
+                .Select(e => new
+                {
+                    EmpId = e.Id,
+                    EmpName = e.Name,
+                    EmpEmail = e.Email,
+                    EmpPhone = e.PhoneNumber,
+                    EmpSalary = e.Salary,
+                    EmpDepartment = department.Name
+                }).ToList();
+
+            return result;
+        }
+
+
 
         public async Task<IEnumerable<Department>> GetAllAsync()
         {

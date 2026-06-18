@@ -13,14 +13,14 @@ namespace WebApp.Data
         }
 
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Employee>()
-                .HasOne(e => e.Department)
-                .WithMany(e => e.Employees)
-                .HasForeignKey(e => e.DepartmentId)
-                .OnDelete(DeleteBehavior.SetNull);
-        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Employee>()
+        //        .HasOne(e => e.Department)
+        //        .WithMany(e => e.Employees)
+        //        .HasForeignKey(e => e.DepartmentId)
+        //        .OnDelete(DeleteBehavior.SetNull);
+        //}
 
 
         //modelBuilder.Entity<Employee>()

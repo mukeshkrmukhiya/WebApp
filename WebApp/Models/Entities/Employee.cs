@@ -19,7 +19,7 @@ namespace WebApp.Models.Entities
 
         // Navigation Property
                         
-        public Department? Department { get; set; }
+        //public Department? Department { get; set; }
 
     }
 }

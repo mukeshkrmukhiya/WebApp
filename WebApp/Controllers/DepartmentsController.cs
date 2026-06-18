@@ -16,6 +16,15 @@ namespace WebApp.Controllers
             this._departmentService = departmentService;
         }
 
+        [HttpGet("{departmentId}/employees")]
+        public async Task<IActionResult> EmployeesInSameDepartment(int departmentId)
+        {
+            var employees = await _departmentService.EmployeesInSameDepartment(departmentId);
+            return Ok(employees);
+        }
+
+
+
         [HttpGet]
         public async Task<IActionResult> GetAllDepartments()
         {

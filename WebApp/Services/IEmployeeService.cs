@@ -7,6 +7,7 @@ namespace WebApp.Services
     public interface IEmployeeService 
     {
          Task<List<Employee>> GetAllEmployeesAsyc();
+         Task<object> EmployeeFullDetailsAsync();
          Task<Employee?> GetEmployeeByIdAsync(Guid id);
          Task<Employee> AddEmployeeAsync(EmployeeDto employeeDto);
          Task<Employee?> UpdateEmployeeAsync(Guid id, EmployeeDto employeeDto);

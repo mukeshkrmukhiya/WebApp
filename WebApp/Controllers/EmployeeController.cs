@@ -16,6 +16,14 @@ namespace WebApp.Controllers
             this._employeeService = employeeService;
         }
 
+        [HttpGet("details")]
+        public async Task<ActionResult> GetEmployeeFullDetailsAsync()
+        {
+            var empDetails = await _employeeService.EmployeeFullDetailsAsync();
+
+            return Ok(empDetails);
+        }
+
 
         [HttpGet]
         public async Task<ActionResult<List<Employee>>> GetAllEmployees()
